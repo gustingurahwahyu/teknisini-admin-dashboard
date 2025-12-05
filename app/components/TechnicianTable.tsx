@@ -1,3 +1,5 @@
+"use client";
+
 import { Technician } from "../types/technician";
 
 interface TechnicianTableProps {
@@ -11,46 +13,47 @@ export default function TechnicianTable({
   onEdit,
   onDelete,
 }: TechnicianTableProps) {
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+    }).format(price);
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-      <div className="p-6 bg-sky-500">
-        <h2 className="text-2xl font-bold text-white">Daftar Teknisi</h2>
-      </div>
-
       <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-sky-100">
+        <table className="min-w-full divide-y divide-gray-200">
+          <thead className="bg-gradient-to-r from-blue-600 to-blue-700">
             <tr>
-              <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
-                No
-              </th>
-              <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
+              <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                 Nama
               </th>
-              <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
+              <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                 Kategori
               </th>
-              <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
+              <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                 Lokasi
               </th>
-              <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
-                Telepon
+              <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
+                Kontak
               </th>
-              <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
+              <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                 Rating
               </th>
-              <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
+              <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                 Harga/Jam
               </th>
-              <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">
+              <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                 Status
               </th>
-              <th className="px-6 py-4 text-center text-sm font-bold text-gray-700">
+              <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                 Aksi
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-200">
             {technicians.length === 0 ? (
               <tr>
                 <td
@@ -82,22 +85,19 @@ export default function TechnicianTable({
                 </td>
               </tr>
             ) : (
-              technicians.map((tech, index) => (
-                <tr key={tech.id} className="hover:bg-sky-50 transition-colors">
-                  <td className="px-6 py-4 text-sm text-gray-700">
-                    {index + 1}
-                  </td>
-                  <td className="px-6 py-4">
+              technicians.map((tech) => (
+                <tr key={tech.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-3">
                       {tech.photoURL && (
                         <img
                           src={tech.photoURL}
                           alt={tech.name}
-                          className="w-10 h-10 rounded-full object-cover"
+                          className="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
                         />
                       )}
                       <div>
-                        <div className="font-semibold text-gray-800">
+                        <div className="text-sm font-medium text-gray-900">
                           {tech.name}
                         </div>
                         <div className="text-xs text-gray-500">
@@ -106,54 +106,56 @@ export default function TechnicianTable({
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <span className="px-3 py-1 bg-sky-100 text-sky-700 rounded-full text-xs font-semibold">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold border border-blue-300">
                       {tech.category}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">
-                    {tech.location}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">
+                      {tech.location}
+                    </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-700">
-                    {tech.phone}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{tech.phone}</div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-1">
                       <span className="text-yellow-500">⭐</span>
-                      <span className="font-semibold text-gray-800">
+                      <span className="text-sm font-semibold text-gray-900">
                         {tech.rating.toFixed(1)}
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm font-semibold text-gray-800">
-                    Rp {tech.price.toLocaleString("id-ID")}
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm font-semibold text-gray-900">
+                      {formatPrice(tech.price)}
+                    </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      className={`px-3 py-1 rounded-full text-xs font-semibold border ${
                         tech.available
-                          ? "bg-green-100 text-green-700"
-                          : "bg-gray-100 text-gray-700"
+                          ? "bg-green-100 text-green-800 border-green-300"
+                          : "bg-gray-100 text-gray-800 border-gray-300"
                       }`}
                     >
                       {tech.available ? "Tersedia" : "Tidak Tersedia"}
                     </span>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex gap-2 justify-center">
-                      <button
-                        onClick={() => onEdit(tech)}
-                        className="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-sm font-semibold transition-all"
-                      >
-                        ✏️ Edit
-                      </button>
-                      <button
-                        onClick={() => onDelete(tech.id)}
-                        className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-semibold transition-all"
-                      >
-                        🗑️ Hapus
-                      </button>
-                    </div>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <button
+                      onClick={() => onEdit(tech)}
+                      className="text-blue-600 hover:text-blue-900 mr-3 transition-colors"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => onDelete(tech.id)}
+                      className="text-red-600 hover:text-red-900 transition-colors"
+                    >
+                      Hapus
+                    </button>
                   </td>
                 </tr>
               ))
@@ -161,18 +163,6 @@ export default function TechnicianTable({
           </tbody>
         </table>
       </div>
-
-      {technicians.length > 0 && (
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-200">
-          <p className="text-sm text-gray-600">
-            Total:{" "}
-            <span className="font-semibold text-gray-800">
-              {technicians.length}
-            </span>{" "}
-            teknisi
-          </p>
-        </div>
-      )}
     </div>
   );
 }
