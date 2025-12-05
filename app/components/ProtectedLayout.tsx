@@ -3,6 +3,7 @@
 import { useAuth } from "../contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import Sidebar from "./Sidebar";
 
 export default function ProtectedLayout({
   children,
@@ -33,5 +34,10 @@ export default function ProtectedLayout({
     return null;
   }
 
-  return <>{children}</>;
+  return (
+    <>
+      <Sidebar />
+      {children}
+    </>
+  );
 }
