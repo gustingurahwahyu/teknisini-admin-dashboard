@@ -17,7 +17,16 @@ export const fetchBookings = async (): Promise<Booking[]> => {
     const querySnapshot = await getDocs(q);
     const bookingList: Booking[] = [];
     querySnapshot.forEach((doc) => {
-      bookingList.push({ id: doc.id, ...doc.data() } as Booking);
+      const data = doc.data();
+      // Ensure price is a valid number, default to 0 if not
+      const booking: Booking = {
+        id: doc.id,
+        ...data,
+        price: typeof data.price === 'number' && !isNaN(data.price) 
+          ? data.price 
+          : 0,
+      } as Booking;
+      bookingList.push(booking);
     });
     return bookingList;
   } catch (error) {
@@ -43,7 +52,7 @@ export const saveBooking = async (
         scheduledDate: new Date(formData.scheduledDate),
         status: formData.status,
         notes: formData.notes,
-        totalPrice: formData.totalPrice,
+        price: formData.price,
         updatedAt: new Date(),
       };
 
@@ -60,7 +69,7 @@ export const saveBooking = async (
         scheduledDate: new Date(formData.scheduledDate),
         status: formData.status,
         notes: formData.notes,
-        totalPrice: formData.totalPrice,
+        price: formData.price,
         createdAt: new Date(),
         updatedAt: new Date(),
       };

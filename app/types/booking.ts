@@ -8,7 +8,7 @@ export interface Booking {
   scheduledDate: any;
   status: "pending" | "confirmed" | "in-progress" | "completed" | "cancelled";
   notes?: string;
-  totalPrice: number;
+  price: number;
   createdAt?: any;
   updatedAt?: any;
 }
@@ -22,7 +22,7 @@ export interface BookingForm {
   scheduledDate: string;
   status: "pending" | "confirmed" | "in-progress" | "completed" | "cancelled";
   notes: string;
-  totalPrice: number;
+  price: number;
 }
 
 export const BOOKING_STATUS = [

@@ -139,8 +139,8 @@ export default function BookingForm({
             </label>
             <input
               type="number"
-              name="totalPrice"
-              value={formData.totalPrice}
+              name="price"
+              value={formData.price}
               onChange={onInputChange}
               required
               min="0"

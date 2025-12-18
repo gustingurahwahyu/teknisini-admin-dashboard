@@ -21,7 +21,7 @@ export function useBookings() {
     scheduledDate: "",
     status: "pending",
     notes: "",
-    totalPrice: 0,
+    price: 0,
   });
 
   const loadBookings = async () => {
@@ -86,7 +86,9 @@ export function useBookings() {
         : "",
       status: booking.status,
       notes: booking.notes || "",
-      totalPrice: booking.totalPrice,
+      price: typeof booking.price === 'number' && !isNaN(booking.price)
+        ? booking.price
+        : 0,
     });
     setEditingId(booking.id);
     setShowForm(true);
@@ -126,7 +128,7 @@ export function useBookings() {
       scheduledDate: "",
       status: "pending",
       notes: "",
-      totalPrice: 0,
+      price: 0,
     });
     setEditingId(null);
   };

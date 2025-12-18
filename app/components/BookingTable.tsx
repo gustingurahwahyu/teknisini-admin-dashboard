@@ -25,12 +25,14 @@ export default function BookingTable({
     });
   };
 
-  const formatPrice = (price: number) => {
+  const formatPrice = (price: number | undefined | null) => {
+    // Handle undefined, null, or NaN values
+    const validPrice = typeof price === 'number' && !isNaN(price) ? price : 0;
     return new Intl.NumberFormat("id-ID", {
       style: "currency",
       currency: "IDR",
       minimumFractionDigits: 0,
-    }).format(price);
+    }).format(validPrice);
   };
 
   const getStatusBadge = (status: string) => {
@@ -145,7 +147,7 @@ export default function BookingTable({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-semibold text-gray-900">
-                      {formatPrice(booking.totalPrice)}
+                      {formatPrice(booking.price)}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

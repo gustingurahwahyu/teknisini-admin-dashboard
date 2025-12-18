@@ -1,4 +1,4 @@
-import { db, storage } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 import {
   collection,
   addDoc,
@@ -7,8 +7,8 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Technician, TechnicianForm } from "../types/technician";
+import { uploadToImgBB } from "./imageUploadService";
 
 export const fetchTechnicians = async (): Promise<Technician[]> => {
   try {
@@ -34,14 +34,17 @@ export const saveTechnician = async (
     let photoURL = "";
 
     if (photoFile) {
-      console.log("Uploading photo:", photoFile.name);
-      const storageRef = ref(
-        storage,
-        `technicians/${Date.now()}_${photoFile.name}`
-      );
-      await uploadBytes(storageRef, photoFile);
-      photoURL = await getDownloadURL(storageRef);
-      console.log("Photo uploaded:", photoURL);
+      console.log("Uploading photo to ImgBB:", photoFile.name);
+      const uploadResult = await uploadToImgBB(photoFile);
+      
+      if (uploadResult.success) {
+        photoURL = uploadResult.url;
+        console.log("Photo uploaded successfully:", photoURL);
+      } else {
+        console.error("Photo upload failed:", uploadResult.error);
+        // Continue without photo if upload fails
+        photoURL = "";
+      }
     }
 
     const skillsArray = formData.skills
