@@ -37,7 +37,10 @@ export default function TechnicianTable({
                 Lokasi
               </th>
               <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
-                Kontak
+                Phone
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
+                Email
               </th>
               <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                 Rating
@@ -57,7 +60,7 @@ export default function TechnicianTable({
             {technicians.length === 0 ? (
               <tr>
                 <td
-                  colSpan={9}
+                  colSpan={10}
                   className="px-6 py-12 text-center text-gray-500"
                 >
                   <div className="flex flex-col items-center">
@@ -118,6 +121,9 @@ export default function TechnicianTable({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{tech.phone}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">{tech.email}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-1">

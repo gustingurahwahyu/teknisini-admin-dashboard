@@ -194,7 +194,7 @@ export default function Home() {
               Dashboard
             </h1>
             <p className="text-gray-600">
-              Selamat datang di Dashboard Admin TeknisiNi
+              Selamat datang di Dashboard Admin TekniSini
             </p>
           </div>
 

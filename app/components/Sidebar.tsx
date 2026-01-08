@@ -144,7 +144,7 @@ export default function Sidebar() {
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="p-6 border-b border-blue-700">
-            <h1 className="text-2xl font-bold">TeknisiNi</h1>
+            <h1 className="text-2xl font-bold">TekniSini</h1>
             <p className="text-blue-200 text-sm mt-1">Admin Dashboard</p>
           </div>
 

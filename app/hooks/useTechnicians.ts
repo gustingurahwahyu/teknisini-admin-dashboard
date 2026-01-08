@@ -94,8 +94,8 @@ export function useTechnicians() {
       rating: tech.rating,
       price: tech.price,
       skills: tech.skills.join(", "),
-      phone: tech.phone || "",
-      email: tech.email || "",
+      phone: tech.phone,
+      email: tech.email,
       available: tech.available,
     });
     setEditingId(tech.id);

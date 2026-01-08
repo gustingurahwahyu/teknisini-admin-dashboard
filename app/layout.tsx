@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Dashboard TeknisiNi",
-  description: "Dashboard Admin TeknisiNi",
+  title: "Dashboard TekniSini",
+  description: "Dashboard Admin TekniSini",
 };
 
 export default function RootLayout({
