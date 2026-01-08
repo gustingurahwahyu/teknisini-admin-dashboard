@@ -8,6 +8,7 @@ import {
   updateDoc,
   query,
   orderBy,
+  getDoc,
 } from "firebase/firestore";
 import { Booking, BookingForm } from "../types/booking";
 
@@ -16,18 +17,39 @@ export const fetchBookings = async (): Promise<Booking[]> => {
     const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
     const querySnapshot = await getDocs(q);
     const bookingList: Booking[] = [];
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      // Ensure price is a valid number, default to 0 if not
+    
+    // Fetch all bookings with user email and phone data
+    for (const docSnapshot of querySnapshot.docs) {
+      const data = docSnapshot.data();
+      
+      // Fetch user email and phone from users collection
+      let userEmail = "";
+      let userPhone = "";
+      if (data.userId) {
+        try {
+          const userDoc = await getDoc(doc(db, "users", data.userId));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            userEmail = userData.email || "";
+            userPhone = userData.phone || "";
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      }
+      
       const booking: Booking = {
-        id: doc.id,
+        id: docSnapshot.id,
         ...data,
+        userEmail,
+        userPhone,
         price: typeof data.price === 'number' && !isNaN(data.price) 
           ? data.price 
           : 0,
       } as Booking;
       bookingList.push(booking);
-    });
+    }
+    
     return bookingList;
   } catch (error) {
     console.error("Error fetching bookings:", error);

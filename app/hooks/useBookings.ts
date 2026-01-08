@@ -76,15 +76,15 @@ export function useBookings() {
 
   const handleEdit = (booking: Booking) => {
     setFormData({
-      userId: booking.userId,
-      technicianId: booking.technicianId,
-      technicianName: booking.technicianName,
-      category: booking.category,
-      address: booking.address,
+      userId: booking.userId || "",
+      technicianId: booking.technicianId || "",
+      technicianName: booking.technicianName || "",
+      category: booking.category || "",
+      address: booking.address || "",
       scheduledDate: booking.scheduledDate?.toDate
         ? booking.scheduledDate.toDate().toISOString().slice(0, 16)
         : "",
-      status: booking.status,
+      status: booking.status || "pending",
       notes: booking.notes || "",
       price: typeof booking.price === 'number' && !isNaN(booking.price)
         ? booking.price

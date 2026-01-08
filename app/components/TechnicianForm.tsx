@@ -4,6 +4,8 @@ interface TechnicianFormComponentProps {
   formData: TechnicianForm;
   loading: boolean;
   editingId: string | null;
+  portfolioFiles: File[];
+  existingPortfolioURLs: string[];
   onSubmit: (e: React.FormEvent) => void;
   onInputChange: (
     e: React.ChangeEvent<
@@ -11,6 +13,9 @@ interface TechnicianFormComponentProps {
     >
   ) => void;
   onPhotoChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onPortfolioChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onRemovePortfolioFile: (index: number) => void;
+  onRemoveExistingPortfolio: (index: number) => void;
   onCancelEdit: () => void;
   setFormData: React.Dispatch<React.SetStateAction<TechnicianForm>>;
 }
@@ -19,12 +24,19 @@ export default function TechnicianFormComponent({
   formData,
   loading,
   editingId,
+  portfolioFiles,
+  existingPortfolioURLs,
   onSubmit,
   onInputChange,
   onPhotoChange,
+  onPortfolioChange,
+  onRemovePortfolioFile,
+  onRemoveExistingPortfolio,
   onCancelEdit,
   setFormData,
 }: TechnicianFormComponentProps) {
+  const totalPortfolioCount = portfolioFiles.length + existingPortfolioURLs.length;
+  
   return (
     <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
       <h2 className="text-2xl font-bold text-gray-800 mb-6">
@@ -199,6 +211,77 @@ export default function TechnicianFormComponent({
             />
             <p className="mt-1 text-xs text-gray-500">
               Opsional - Upload foto profil teknisi
+            </p>
+          </div>
+
+          {/* Portfolio - Full Width */}
+          <div className="md:col-span-2">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Foto Portfolio (Maks 3)
+            </label>
+            
+            {/* Existing Portfolio Images */}
+            {existingPortfolioURLs.length > 0 && (
+              <div className="mb-3">
+                <p className="text-xs text-gray-500 mb-2">Portfolio saat ini:</p>
+                <div className="flex flex-wrap gap-3">
+                  {existingPortfolioURLs.map((url, index) => (
+                    <div key={`existing-${index}`} className="relative">
+                      <img
+                        src={url}
+                        alt={`Portfolio ${index + 1}`}
+                        className="w-24 h-24 object-cover rounded-lg border border-gray-200"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => onRemoveExistingPortfolio(index)}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* New Portfolio Files Preview */}
+            {portfolioFiles.length > 0 && (
+              <div className="mb-3">
+                <p className="text-xs text-gray-500 mb-2">File baru yang akan diupload:</p>
+                <div className="flex flex-wrap gap-3">
+                  {portfolioFiles.map((file, index) => (
+                    <div key={`new-${index}`} className="relative">
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={`New Portfolio ${index + 1}`}
+                        className="w-24 h-24 object-cover rounded-lg border border-blue-200"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => onRemovePortfolioFile(index)}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {totalPortfolioCount < 3 && (
+              <input
+                type="file"
+                id="portfolio"
+                accept="image/*"
+                multiple
+                onChange={onPortfolioChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            )}
+            <p className="mt-1 text-xs text-gray-500">
+              Opsional - Upload foto hasil kerja/portfolio teknisi ({totalPortfolioCount}/3)
             </p>
           </div>
 

@@ -76,6 +76,12 @@ export default function BookingTable({
                 Alamat
               </th>
               <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
+                Email
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
+                Phone
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                 Jadwal
               </th>
               <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
@@ -93,7 +99,7 @@ export default function BookingTable({
             {bookings.length === 0 ? (
               <tr>
                 <td
-                  colSpan={6}
+                  colSpan={8}
                   className="px-6 py-12 text-center text-gray-500"
                 >
                   <div className="flex flex-col items-center">
@@ -135,6 +141,16 @@ export default function BookingTable({
                   <td className="px-6 py-4">
                     <div className="text-sm text-gray-900 max-w-xs truncate">
                       {booking.address}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">
+                      {booking.userEmail || "-"}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-900">
+                      {booking.userPhone || "-"}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">

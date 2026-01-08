@@ -27,6 +27,8 @@ export const fetchTechnicians = async (): Promise<Technician[]> => {
 export const saveTechnician = async (
   formData: TechnicianForm,
   photoFile: File | null,
+  portfolioFiles: File[],
+  existingPortfolioURLs: string[],
   editingId: string | null
 ): Promise<{ success: boolean; message: string }> => {
   try {
@@ -47,6 +49,17 @@ export const saveTechnician = async (
       }
     }
 
+    // Upload portfolio images
+    const portfolioURLs: string[] = [...existingPortfolioURLs];
+    for (const file of portfolioFiles) {
+      console.log("Uploading portfolio image:", file.name);
+      const uploadResult = await uploadToImgBB(file);
+      if (uploadResult.success && uploadResult.url) {
+        portfolioURLs.push(uploadResult.url);
+        console.log("Portfolio image uploaded:", uploadResult.url);
+      }
+    }
+
     const skillsArray = formData.skills
       .split(",")
       .map((skill) => skill.trim())
@@ -64,6 +77,7 @@ export const saveTechnician = async (
         phone: formData.phone,
         email: formData.email,
         available: formData.available,
+        portfolioURLs,
         updatedAt: new Date(),
       };
 
@@ -87,6 +101,7 @@ export const saveTechnician = async (
         email: formData.email,
         available: formData.available,
         photoURL,
+        portfolioURLs,
         createdAt: new Date(),
         updatedAt: new Date(),
       };

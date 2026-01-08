@@ -5,6 +5,8 @@ export interface Booking {
   technicianName: string;
   category: string;
   address: string;
+  userEmail: string;
+  userPhone: string;
   scheduledDate: any;
   status: "pending" | "confirmed" | "in-progress" | "completed" | "cancelled";
   notes?: string;

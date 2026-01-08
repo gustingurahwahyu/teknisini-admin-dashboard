@@ -11,6 +11,7 @@ export interface Technician {
   email: string;
   available: boolean;
   photoURL?: string;
+  portfolioURLs?: string[];
   createdAt?: any;
   updatedAt?: any;
 }

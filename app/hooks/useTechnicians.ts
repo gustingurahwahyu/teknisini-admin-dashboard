@@ -13,6 +13,8 @@ export function useTechnicians() {
   const [showForm, setShowForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [portfolioFiles, setPortfolioFiles] = useState<File[]>([]);
+  const [existingPortfolioURLs, setExistingPortfolioURLs] = useState<string[]>([]);
   const [formData, setFormData] = useState<TechnicianForm>({
     name: "",
     category: "Kelistrikan",
@@ -60,6 +62,28 @@ export function useTechnicians() {
     }
   };
 
+  const handlePortfolioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      const totalFiles = portfolioFiles.length + existingPortfolioURLs.length + files.length;
+      
+      if (totalFiles > 3) {
+        setMessage("❌ Maksimal 3 foto portfolio!");
+        return;
+      }
+      
+      setPortfolioFiles(prev => [...prev, ...files]);
+    }
+  };
+
+  const removePortfolioFile = (index: number) => {
+    setPortfolioFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const removeExistingPortfolio = (index: number) => {
+    setExistingPortfolioURLs(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -67,7 +91,7 @@ export function useTechnicians() {
 
     try {
       console.log("Submitting data:", formData);
-      const result = await saveTechnician(formData, photoFile, editingId);
+      const result = await saveTechnician(formData, photoFile, portfolioFiles, existingPortfolioURLs, editingId);
       console.log("Result:", result);
       setMessage(result.message);
 
@@ -87,17 +111,19 @@ export function useTechnicians() {
   const handleEdit = (tech: Technician) => {
     console.log("Editing technician:", tech); // Debug log
     setFormData({
-      name: tech.name,
-      category: tech.category,
-      location: tech.location,
-      description: tech.description,
-      rating: tech.rating,
-      price: tech.price,
-      skills: tech.skills.join(", "),
-      phone: tech.phone,
-      email: tech.email,
-      available: tech.available,
+      name: tech.name || "",
+      category: tech.category || "Kelistrikan",
+      location: tech.location || "",
+      description: tech.description || "",
+      rating: tech.rating || 5.0,
+      price: tech.price || 100000,
+      skills: tech.skills ? tech.skills.join(", ") : "",
+      phone: tech.phone || "",
+      email: tech.email || "",
+      available: tech.available ?? true,
     });
+    setExistingPortfolioURLs(tech.portfolioURLs || []);
+    setPortfolioFiles([]);
     setEditingId(tech.id);
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -132,8 +158,12 @@ export function useTechnicians() {
       available: true,
     });
     setPhotoFile(null);
+    setPortfolioFiles([]);
+    setExistingPortfolioURLs([]);
     const fileInput = document.getElementById("photo") as HTMLInputElement;
     if (fileInput) fileInput.value = "";
+    const portfolioInput = document.getElementById("portfolio") as HTMLInputElement;
+    if (portfolioInput) portfolioInput.value = "";
   };
 
   const toggleForm = () => {
@@ -150,9 +180,14 @@ export function useTechnicians() {
     showForm,
     editingId,
     formData,
+    portfolioFiles,
+    existingPortfolioURLs,
     setFormData,
     handleInputChange,
     handlePhotoChange,
+    handlePortfolioChange,
+    removePortfolioFile,
+    removeExistingPortfolio,
     handleSubmit,
     handleEdit,
     handleCancelEdit,

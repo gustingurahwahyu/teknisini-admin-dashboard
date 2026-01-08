@@ -13,9 +13,14 @@ export default function TechniciansPage() {
     showForm,
     editingId,
     formData,
+    portfolioFiles,
+    existingPortfolioURLs,
     setFormData,
     handleInputChange,
     handlePhotoChange,
+    handlePortfolioChange,
+    removePortfolioFile,
+    removeExistingPortfolio,
     handleSubmit,
     handleEdit,
     handleCancelEdit,
@@ -87,9 +92,14 @@ export default function TechniciansPage() {
               formData={formData}
               loading={loading}
               editingId={editingId}
+              portfolioFiles={portfolioFiles}
+              existingPortfolioURLs={existingPortfolioURLs}
               onSubmit={handleSubmit}
               onInputChange={handleInputChange}
               onPhotoChange={handlePhotoChange}
+              onPortfolioChange={handlePortfolioChange}
+              onRemovePortfolioFile={removePortfolioFile}
+              onRemoveExistingPortfolio={removeExistingPortfolio}
               onCancelEdit={handleCancelEdit}
               setFormData={setFormData}
             />
